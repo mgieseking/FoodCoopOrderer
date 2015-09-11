@@ -11,13 +11,12 @@ Two scripts for...
 	* ```pip install beautifulsoup4```
 
 ## Run
-1. Enter ```python crawl.py``` in cmd.exe
+1. Enter ```python ``` in cmd.exe, drag'n'drop ```crawl.py``` and press enter
 	* A ```articles.csv``` is created
 	* Create all the categories in the FoodSoft
 	* Create a new supplier in the FoodSoft and import the file 
 2. Login on the supplier website and select a delivery date for your current shopping cart
 	* In the FoodSoft, download the order summary Fax text file
-	* Rename the file to ```input.txt```
-	* Enter ```python order.py``` in cmd.exe
+	* Enter ```python ``` in cmd.exe, drag'n'drop ```order2eco.py```, drag'n'drop your text file and press enter
 	* Many browser tabs will open, adding articles to your shopping cart
 	* Compare the total costs of the supplier and the FoodSoft order
