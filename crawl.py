@@ -20,6 +20,7 @@ CATEGORY_LIST = [
 ]
 TROCKENWARE = 'Trockenware'
 ALL_ITEMS = [('http://www.ecocion-shop.de/web/main.php/shop/index/seite/21273?pper_page=10000&switchView=true', TROCKENWARE)]
+BUNDLE_CATEGORY = '0 Gebinde'
 
 
 def write_file(filename, item_list):
@@ -42,8 +43,8 @@ if __name__ == '__main__':
             preis = item_div.find('input', attrs={'name': 'preis'})['value']
             pfand = item_div.find('input', attrs={'name': 'pfand'})['value']
             name = item_div.find('input', attrs={'name': 'name'})['value']
-            einheit = item_div.find('span', class_='plEinheit')['title']  # find <span class='plEinheit' id='einheit_579440' title='kg'>kg</span>)
             name = name[:59]  # cut too long names
+            einheit = item_div.find('span', class_='plEinheit')['title']  # find <span class='plEinheit' id='einheit_579440' title='kg'>kg</span>)
             if einheit == '':
                 einheit_dropdown = item_div.find('select', class_='stk_best')
                 options = einheit_dropdown.findAll('option')  # find <option id="opt_660778" value="0"> Kg</option>
@@ -55,12 +56,25 @@ if __name__ == '__main__':
             if len(einheit) == 1:
                 einheit = einheit + '_'
             notiz = item_div.find('a')['href']
-            row = ';{bestellnummer};{name};{notiz};;;{einheit};{preis};{mehrwertsteuer};{pfand};{gebindegroesse};{staffelmenge};{staffelpreis};{category}'
+
+            # add bundles
+            if ' 5kg' in name:
+                kategorie = BUNDLE_CATEGORY
+                gebindegroesse = 5
+                preis = float(preis) / gebindegroesse
+                einheit = '1kg'
+            elif ' 25kg' in name:
+                kategorie = BUNDLE_CATEGORY
+                gebindegroesse = 10
+                preis = float(preis) / gebindegroesse
+                einheit = '2.5kg'
+            else:
+                gebindegroesse = 1
+                kategorie = category
+
+            row = ';{bestellnummer};{name};{notiz};;;{einheit};{preis};{mehrwertsteuer};{pfand};{gebindegroesse};;;{kategorie}'
             # the foodsoft wants each row / item in this form, e.g. ;;Erdnussmus fein;;;;500 g;4,99;-0,17;0;1;;;Other
             mehrwertsteuer = '-17'
-            gebindegroesse = 1
-            staffelmenge = ''
-            staffelpreis = ''
             item = row.format_map(vars())
             # print(item)
             same_bestellnummer = any([bestellnummer in item for item in fresh_item_list])
