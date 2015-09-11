@@ -13,10 +13,10 @@ Food Cool
 ****** Artikel
 
   Nummer    Menge   Name
-                6   Sojade Natur 400g
-                6   Alsan Bio Margarine  Alsan Elmshorn
-                1   Weizenmehl Type  550  Bohlsener Mühle
-                1   Erdnussmus fein
+    111         6   Sojade Natur 400g
+    250         6   Alsan Bio Margarine  Alsan Elmshorn
+     12         1   Weizenmehl Type  550  Bohlsener Mühle
+    40          1   Erdnussmus fein
                 1   Brat- und Backöl
                 1   Alpen Amaranth gepufft
                 1   Spaghetti Semola no.5

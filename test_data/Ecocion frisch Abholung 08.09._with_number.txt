@@ -13,4 +13,11 @@ Food Cool
 ****** Artikel
 
   Nummer    Menge   Name
-     111        1   Apfel Elstar Frankreich (einer wiegt 200g)
+   392459    2   Bioland Joghurt Natur 1L
+   392524    1   Gnocchi 400g Pasta Nuova
+   392577    4   Räuchertofu  Taifun Naturkost
+   392579    3   Tofu Rosso   Taifun Naturkost
+   392766    5   Bircher Müsli mit Amaranth  Allos
+   556602    6   Bratöl  Byodo
+   392848    7   Parboiled Langkorn Spitzenreis  Davert Mühle
+   392849    8   Bulgur  500g  Davert Mühle
