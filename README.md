@@ -3,7 +3,7 @@
 * Install Python 3: https://www.python.org/downloads/
 	* Check the checkbox 'Add to path'
 * Install Python modules by entering in cmd.exe:
-	* ```pip install beautifulsoup4```
+	* ```pip install beautifulsoup4 requests```
 
 ## Use
 #### Importing articles from suppliers running the http://ecoinform.de/ system into the FoodSoft
