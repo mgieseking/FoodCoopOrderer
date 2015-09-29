@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from bs4 import BeautifulSoup
 import requests
+import re
 
 CATEGORY_LIST = [
     ('http://www.ecocion-shop.de/Obst-frisch/Beeren%2C-Trauben_21327.html', 'Beeren und Trauben'),
@@ -56,6 +57,11 @@ if __name__ == '__main__':
                 name = name + append
             if len(einheit) == 1:
                 einheit = einheit + '_'
+            # convert kg prices in 100g prices
+            if re.search('kg', einheit, re.IGNORECASE):
+                einheit = '100g'
+                preis = float(preis) / 10
+
             notiz = item_div.find('a')['href']
 
             # add bundles
