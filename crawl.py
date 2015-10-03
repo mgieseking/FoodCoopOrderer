@@ -23,6 +23,7 @@ CATEGORY_LIST = [
 TROCKENWARE = 'Trockenware'
 ALL_ITEMS = [('http://www.ecocion-shop.de/web/main.php/shop/index/seite/21273?pper_page=10000&switchView=true', TROCKENWARE)]
 BUNDLE_CATEGORY = '0 Gebinde'
+COLUMN_NAMES = ';{bestellnummer};{name};{notiz};;;{einheit};{preis};{mehrwertsteuer};{pfand};{gebindegroesse};;;{kategorie}'
 
 
 def write_file(filename, item_list):
@@ -32,8 +33,8 @@ def write_file(filename, item_list):
 
 
 if __name__ == '__main__':
-    fresh_item_list = ['first row has to be empty']
-    dry_item_list = ['first row has to be empty']
+    fresh_item_list = [COLUMN_NAMES]
+    dry_item_list = [COLUMN_NAMES]
 
     for url, category in CATEGORY_LIST + ALL_ITEMS:
         html_doc = requests.get(url).text
@@ -44,8 +45,17 @@ if __name__ == '__main__':
             bestellnummer = item_div.find('input', attrs={'name': 'live_pid'})['value']  # find <input name='live_pid' type='hidden' value='579440'/>
             preis = item_div.find('input', attrs={'name': 'preis'})['value']
             pfand = item_div.find('input', attrs={'name': 'pfand'})['value']
+
             name = item_div.find('input', attrs={'name': 'name'})['value']
+            name = re.sub(' +', ' ', name)  # replace multiple whitespaces
+            marke = item_div.find('div', class_='plMarke').string
+            if marke is not None and marke not in name:
+                name = name + ' ' + marke
             name = name[:59]  # cut too long names
+
+            notiz = item_div.find('span', class_='verkehrsbez').string  # Verkehrsbezeichnung, e.g. Bio-Jogurt mild mit Kokos-Zubereitung, mindestens 3,7% Fett im Milchanteil
+            notiz = notiz if notiz is not None else ''
+
             einheit = item_div.find('span', class_='plEinheit')['title']  # find <span class='plEinheit' id='einheit_579440' title='kg'>kg</span>)
             if einheit == '':
                 einheit_dropdown = item_div.find('select', class_='stk_best')
@@ -62,8 +72,6 @@ if __name__ == '__main__':
                 einheit = '100g'
                 preis = float(preis) / 10
 
-            notiz = item_div.find('a')['href']
-
             # add bundles
             if ' 5kg' in name:
                 kategorie = BUNDLE_CATEGORY
@@ -79,7 +87,7 @@ if __name__ == '__main__':
                 gebindegroesse = 1
                 kategorie = category
 
-            row = ';{bestellnummer};{name};{notiz};;;{einheit};{preis};{mehrwertsteuer};{pfand};{gebindegroesse};;;{kategorie}'
+            row = COLUMN_NAMES
             # the foodsoft wants each row / item in this form, e.g. ;;Erdnussmus fein;;;;500 g;4,99;-0,17;0;1;;;Other
             mehrwertsteuer = '-17'
             item = row.format_map(vars())
