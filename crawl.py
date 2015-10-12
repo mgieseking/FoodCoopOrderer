@@ -23,7 +23,7 @@ CATEGORY_LIST = [
 TROCKENWARE = 'Trockenware'
 ALL_ITEMS = [('http://www.ecocion-shop.de/web/main.php/shop/index/seite/21273?pper_page=10000&switchView=true', TROCKENWARE)]
 BUNDLE_CATEGORY = '0 Gebinde'
-COLUMN_NAMES = ';{bestellnummer};{name};{notiz};;;{einheit};{preis};{mehrwertsteuer};{pfand};{gebindegroesse};;;{kategorie}'
+COLUMN_NAMES = ';{bestellnummer};{name};;;;{einheit};{preis};{mehrwertsteuer};{pfand};{gebindegroesse};;;{kategorie}'
 
 
 def write_file(filename, item_list):
@@ -33,8 +33,8 @@ def write_file(filename, item_list):
 
 
 if __name__ == '__main__':
-    fresh_item_list = [COLUMN_NAMES]
-    dry_item_list = [COLUMN_NAMES]
+    fresh_item_list = ['empty row']
+    dry_item_list = ['empty row']
 
     for url, category in CATEGORY_LIST + ALL_ITEMS:
         html_doc = requests.get(url).text
@@ -52,9 +52,6 @@ if __name__ == '__main__':
             if marke is not None and marke not in name:
                 name = name + ' ' + marke
             name = name[:59]  # cut too long names
-
-            notiz = item_div.find('span', class_='verkehrsbez').string  # Verkehrsbezeichnung, e.g. Bio-Jogurt mild mit Kokos-Zubereitung, mindestens 3,7% Fett im Milchanteil
-            notiz = notiz if notiz is not None else ''
 
             einheit = item_div.find('span', class_='plEinheit')['title']  # find <span class='plEinheit' id='einheit_579440' title='kg'>kg</span>)
             if einheit == '':
