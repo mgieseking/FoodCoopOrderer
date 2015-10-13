@@ -64,10 +64,6 @@ if __name__ == '__main__':
                 name = name + append
             if len(einheit) == 1:
                 einheit = einheit + '_'
-            # convert kg prices in 100g prices
-            if re.search('kg', einheit, re.IGNORECASE):
-                einheit = '100g'
-                preis = float(preis) / 10
 
             # add bundles
             if ' 5kg' in name:
@@ -84,10 +80,14 @@ if __name__ == '__main__':
                 gebindegroesse = 1
                 kategorie = category
 
-            row = COLUMN_NAMES
+            # convert kg prices in 100g prices
+            if re.search('kg', einheit, re.IGNORECASE) and kategorie != BUNDLE_CATEGORY:
+                einheit = '100g'
+                preis = float(preis) / 10              
+
             # the foodsoft wants each row / item in this form, e.g. ;;Erdnussmus fein;;;;500 g;4,99;-0,17;0;1;;;Other
             mehrwertsteuer = '-17'
-            item = row.format_map(vars())
+            item = COLUMN_NAMES.format_map(vars())
             # print(item)
             same_bestellnummer = any([bestellnummer in item for item in fresh_item_list])
             same_name = any([name in item for item in dry_item_list])
