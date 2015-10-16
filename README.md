@@ -1,7 +1,7 @@
 # FoodCoopOrderer
 ## Install
 * Install Python 3: https://www.python.org/downloads/
-	* Check the checkbox 'Add to path'
+	* Important: Check the checkboxes 'Add to path' and 'Install pip'
 * Open up a command prompt:
 	* Windows: Search for 'cmd.exe'
 	* Linux, Mac: Search for 'Terminal'

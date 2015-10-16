@@ -80,10 +80,11 @@ if __name__ == '__main__':
                 gebindegroesse = 1
                 kategorie = category
 
-            # convert kg prices in 100g prices
-            if re.search('kg', einheit, re.IGNORECASE) and kategorie != BUNDLE_CATEGORY:
-                einheit = '100g'
-                preis = float(preis) / 10              
+            if category != TROCKENWARE:
+                # convert kg prices in 100g prices
+                if re.search('kg', einheit, re.IGNORECASE) and kategorie != BUNDLE_CATEGORY:
+                    einheit = '100g'
+                    preis = float(preis) / 10
 
             # the foodsoft wants each row / item in this form, e.g. ;;Erdnussmus fein;;;;500 g;4,99;-0,17;0;1;;;Other
             mehrwertsteuer = '-17'
