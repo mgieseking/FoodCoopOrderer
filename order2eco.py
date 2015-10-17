@@ -1,9 +1,11 @@
 import sys
 import webbrowser
 import re
+import time
 
 SHOP = 'http://www.ecocion-shop.de/web/main.php/shop/addCart?live_pid='
 INF = '&menge='
+DELAY = 2
 
 if __name__ == '__main__':
 
@@ -19,3 +21,4 @@ if __name__ == '__main__':
             data = re.split(r' +', line)
             if len(data) > 3:
                 webbrowser.open(SHOP + data[1] + INF + data[2])
+		time.sleep(DELAY)
