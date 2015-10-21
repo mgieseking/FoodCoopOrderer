@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 import re
 
-CATEGORY_LIST = [
+FRESH_CATEGORIES_LIST = [
     ('http://www.ecocion-shop.de/Obst-frisch/Beeren%2C-Trauben_21327.html', 'Beeren und Trauben'),
     ('http://www.ecocion-shop.de/Obst-frisch/Kernobst_21328.html', 'Kernobst'),
     ('http://www.ecocion-shop.de/Obst-frisch/Steinobst_21329.html', 'Steinobst'),
@@ -24,7 +24,7 @@ TROCKENWARE = 'Trockenware'
 ALL_ITEMS = [('http://www.ecocion-shop.de/web/main.php/shop/index/seite/21273?pper_page=10000&switchView=true', TROCKENWARE)]
 BUNDLE_CATEGORY = '0 Gebinde'
 COLUMN_NAMES = ';{bestellnummer};{name};;;;{einheit};{preis};{mehrwertsteuer};{pfand};{gebindegroesse};;;{kategorie}'
-
+GRAMM = '100g'
 
 def write_file(filename, item_list):
     with open(filename, 'w') as file:
@@ -32,11 +32,8 @@ def write_file(filename, item_list):
             file.write(item + '\n')
 
 
-if __name__ == '__main__':
-    fresh_item_list = ['empty row']
-    dry_item_list = ['empty row']
-
-    for url, category in CATEGORY_LIST + ALL_ITEMS:
+def crawl(fresh_item_list, return_into_list, url_category_list):
+    for url, category in url_category_list:
         html_doc = requests.get(url).text
         soup = BeautifulSoup(html_doc, 'html.parser')
         # print(soup.prettify())
@@ -83,22 +80,25 @@ if __name__ == '__main__':
             if category != TROCKENWARE:
                 # convert kg prices in 100g prices
                 if re.search('kg', einheit, re.IGNORECASE) and kategorie != BUNDLE_CATEGORY:
-                    einheit = '100g'
+                    einheit = GRAMM
                     preis = float(preis) / 10
 
             # the foodsoft wants each row / item in this form, e.g. ;;Erdnussmus fein;;;;500 g;4,99;-0,17;0;1;;;Other
             mehrwertsteuer = '-17'
             item = COLUMN_NAMES.format_map(vars())
             # print(item)
-            same_bestellnummer = any([bestellnummer in item for item in fresh_item_list])
-            same_name = any([name in item for item in dry_item_list])
-            if not same_bestellnummer and not same_name:
-                if category == TROCKENWARE:
-                    dry_item_list.append(item)
-                else:
-                    fresh_item_list.append(item)
+            same_bestellnummer = any([bestellnummer in item for item in fresh_item_list]) # remove fresh articles from dry articles
+            same_name = any([name in item for item in return_into_list]) # remove doubles
+            if not same_bestellnummer and not same_name and 'Tüten' not in item:
+                return_into_list.append(item)
 
-    fresh_item_list_without_bags = [item for item in fresh_item_list if 'Tüten' not in item]
 
-    write_file('fresh_articles.csv', fresh_item_list_without_bags)
+if __name__ == '__main__':
+    fresh_item_list = ['empty row']
+    dry_item_list = ['empty row']
+
+    crawl(fresh_item_list, fresh_item_list, FRESH_CATEGORIES_LIST)
+    crawl(fresh_item_list, dry_item_list, ALL_ITEMS)
+
+    write_file('fresh_articles.csv', fresh_item_list)
     write_file('dry_articles.csv', dry_item_list)
