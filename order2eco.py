@@ -26,15 +26,18 @@ if __name__ == '__main__':
             if len(splitted_line) > 3:
                 product_id = splitted_line[1]
                 count = splitted_line[2]
-                for item in fresh_item_list:
-                    if product_id in item:
-                        if crawl.GRAMM in item:
-                            count = str(float(count) / 10)
-                            break
-                        else:  # article is ordered by piece
-                            break
-                else:  # if for terminates normally (not by a break)
-                    print('"' + line + '" ist ausverkauft.')
-                    continue
+
+                if 'frisch' in file.name:
+                    for item in fresh_item_list:
+                        if product_id in item:
+                            if crawl.GRAMM in item:
+                                count = str(float(count) / 10)
+                                break
+                            else:  # article is ordered by piece
+                                break
+                    else:  # if for terminates normally (not by a break)
+                        print('"' + line + '" ist ausverkauft.')
+                        continue
+
                 webbrowser.open(SHOP_URL + product_id + '&menge=' + count + '&wiegeartikel=1')
                 time.sleep(DELAY)
