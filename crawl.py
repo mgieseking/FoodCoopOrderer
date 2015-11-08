@@ -55,12 +55,18 @@ def crawl(fresh_item_list, return_into_list, url_category_list):
                 einheit_dropdown = item_div.find('select', class_='stk_best')
                 options = einheit_dropdown.findAll('option')  # find <option id="opt_660778" value="0"> Kg</option>
                 einheit = options[0].string  # get ' Kg'
-                append = ' ' + options[1].string.replace('Stk ', '')
+                append = ' ' + options[1].string.replace('Stk ', '') # get '(ca 0,15 Kg)'
                 if len(name + append) > 60:  # cut name if name is too long
                     name = name[:(59 - len(append))]
                 name = name + append
             if len(einheit) == 1:
                 einheit = einheit + '_'
+
+            if any([name in item for item in return_into_list]): # item with same name exists, eg.g Erdnussmuss 500g and 250g
+                append = ' ' + einheit
+                if len(name + append) > 60:  # cut name if name is too long
+                    name = name[:(59 - len(append))]
+                name = name + append
 
             # add bundles
             if ' 5kg' in name:
@@ -88,8 +94,7 @@ def crawl(fresh_item_list, return_into_list, url_category_list):
             item = COLUMN_NAMES.format_map(vars())
             # print(item)
             same_bestellnummer = any([bestellnummer in item for item in fresh_item_list]) # remove fresh articles from dry articles
-            same_name = any([name in item for item in return_into_list]) # remove doubles
-            if not same_bestellnummer and not same_name and 'Tüten' not in item:
+            if not same_bestellnummer and 'Tüten' not in item:
                 return_into_list.append(item)
 
 
