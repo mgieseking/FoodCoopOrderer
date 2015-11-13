@@ -18,6 +18,7 @@
 #### Exporting FoodSoft orders to suppliers shops
 * Login on the supplier website and select a delivery date for your current shopping cart
 * In the FoodSoft, download the order summary Fax text file
-* Enter ```python ``` in the command prompt, drag'n'drop ```order2eco.py```, drag'n'drop your text file and press enter
+* Enter ```cd``` in the command prompt, drag'n'drop this folder in the command prompt and press enter
+* Enter ```python order2eco.py ``` in the command prompt, drag'n'drop your text file and press enter
 * Many browser tabs will open, adding articles to your shopping cart
 * Compare the total costs of the supplier and the FoodSoft order

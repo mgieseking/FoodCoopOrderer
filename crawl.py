@@ -2,6 +2,9 @@
 from bs4 import BeautifulSoup
 import requests
 import re
+from datetime import datetime
+
+DRY_ARTICLES_CSV = 'dry_articles.csv'
 
 FRESH_CATEGORIES_LIST = [
     ('http://www.ecocion-shop.de/Obst-frisch/Beeren%2C-Trauben_21327.html', 'Beeren und Trauben'),
@@ -25,6 +28,7 @@ ALL_ITEMS = [('http://www.ecocion-shop.de/web/main.php/shop/index/seite/21273?pp
 BUNDLE_CATEGORY = '0 Gebinde'
 COLUMN_NAMES = ';{bestellnummer};{name};;;;{einheit};{preis};{mehrwertsteuer};{pfand};{gebindegroesse};;;{kategorie}'
 GRAMM = '100g'
+
 
 def write_file(filename, item_list):
     with open(filename, 'w') as file:
@@ -55,14 +59,14 @@ def crawl(fresh_item_list, return_into_list, url_category_list):
                 einheit_dropdown = item_div.find('select', class_='stk_best')
                 options = einheit_dropdown.findAll('option')  # find <option id="opt_660778" value="0"> Kg</option>
                 einheit = options[0].string  # get ' Kg'
-                append = ' ' + options[1].string.replace('Stk ', '') # get '(ca 0,15 Kg)'
+                append = ' ' + options[1].string.replace('Stk ', '')  # get '(ca 0,15 Kg)'
                 if len(name + append) > 60:  # cut name if name is too long
                     name = name[:(59 - len(append))]
                 name = name + append
             if len(einheit) == 1:
                 einheit = einheit + '_'
 
-            if any([name in item for item in return_into_list]): # item with same name exists, eg.g Erdnussmuss 500g and 250g
+            if any([name in item for item in return_into_list]):  # item with same name exists, eg.g Erdnussmuss 500g and 250g
                 append = ' ' + einheit
                 if len(name + append) > 60:  # cut name if name is too long
                     name = name[:(59 - len(append))]
@@ -93,7 +97,7 @@ def crawl(fresh_item_list, return_into_list, url_category_list):
             mehrwertsteuer = '-17'
             item = COLUMN_NAMES.format_map(vars())
             # print(item)
-            same_bestellnummer = any([bestellnummer in item for item in fresh_item_list]) # remove fresh articles from dry articles
+            same_bestellnummer = any([bestellnummer in item for item in fresh_item_list])  # remove fresh articles from dry articles
             if not same_bestellnummer and 'Tüten' not in item:
                 return_into_list.append(item)
 
@@ -106,4 +110,6 @@ if __name__ == '__main__':
     crawl(fresh_item_list, dry_item_list, ALL_ITEMS)
 
     write_file('fresh_articles.csv', fresh_item_list)
-    write_file('dry_articles.csv', dry_item_list)
+    write_file(DRY_ARTICLES_CSV, dry_item_list)
+
+
