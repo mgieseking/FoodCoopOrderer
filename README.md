@@ -22,7 +22,6 @@
 * Enter ```python order2eco.py ``` in the command prompt, drag'n'drop your text file and press enter
 * Many browser tabs will open, adding articles to your shopping cart
 * Compare the total costs of the supplier and the FoodSoft order
-* 
 
 ## Support
 Ask j.korte@me.com
