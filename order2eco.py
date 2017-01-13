@@ -26,20 +26,17 @@ if __name__ == '__main__':
                 name = ' '.join(splitted_line[3:])
                 id_count_name_list.append((product_id, count, name))
 
-        # for each row of the text file split the line and add an order to the shop
         webbrowser.open("workaround, because the first open() does not open anything")
         for product_id, count, name in id_count_name_list:
-            if 'frisch' in input_file.name:
-                for item in fresh_item_list:
-                    if product_id in item:
-                        if crawl.GRAMM in item:
-                            count = str(float(count) / 10)
-                            break
-                        else:  # article is ordered by piece
-                            break
-                else:  # if for terminates normally (not by a break)
-                    print('"' + name + '" ist ausverkauft.')
-                    continue
+            # check if fresh articles are ordered by piece or gramm
+            for item in fresh_item_list:
+                if product_id in item:
+                    if crawl.GRAMM in item:
+                        count = str(float(count) / 10)
+                        break
+                    else:  # article is ordered by piece
+                        break
 
+            # for each row of the text file split the line and add an order to the shop
             webbrowser.open(SHOP_URL + product_id + '&menge=' + count + '&wiegeartikel=1')
             time.sleep(DELAY)
