@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 import re
 from datetime import datetime
+from splinter import Browser
 
 DRY_ARTICLES_CSV = 'dry_articles.csv'
 
@@ -40,7 +41,13 @@ def write_file(filename, item_list):
 
 def crawl(fresh_item_list, return_into_list, url_category_list):
     for url, category in url_category_list:
-        html_doc = requests.get(url).text
+        if url_category_list == FRESH_CATEGORIES_LIST:
+            html_doc = requests.get(url).text
+        else:
+            browser = Browser()
+            browser.visit(url)
+            browser.reload()
+            html_doc = browser.html
         soup = BeautifulSoup(html_doc, 'html.parser')
         # print(soup.prettify())
         item_divs = soup.findAll('div', class_='plWrap')  # find <div class='plWrap'>
