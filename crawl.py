@@ -45,7 +45,7 @@ def crawl(fresh_item_list, return_into_list, url_category_list):
         if url_category_list == FRESH_CATEGORIES_LIST:
             html_doc = requests.get(url).text
         else:
-            browser = Browser()
+            browser = Browser('chrome')
             browser.visit(url)
             browser.reload()
             html_doc = browser.html
