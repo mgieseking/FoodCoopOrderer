@@ -6,7 +6,7 @@
 	* Windows: Search for 'cmd.exe'
 	* Linux, Mac: Search for 'Terminal'
 * Install Python modules by entering in the command prompt:
-	* ```pip install beautifulsoup4 requests```
+	* ```pip install beautifulsoup4 requests splinter```
 
 ## Use
 #### Importing articles from suppliers running the http://ecoinform.de/ system into the FoodSoft
