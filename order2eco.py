@@ -26,13 +26,17 @@ if __name__ == '__main__':
                 name = ' '.join(splitted_line[3:])
                 id_count_name_list.append((product_id, count, name))
 
-        webbrowser.open("workaround, because the first open() does not open anything")
+        webbrowser.open("http://workaround_because_the_first_open_does_not_open_anything.org")
         for product_id, count, name in id_count_name_list:
-            # check if fresh articles are ordered by piece or gramm
+            # convert 100 g prices back to kg prices
             for item in fresh_item_list:
                 if product_id in item:
-                    if crawl.GRAMM in item:
-                        count = str(float(count) / 10)
+                    einheit = item.split(';')[6]
+
+
+                    if crawl.KG in item:
+                        if re.search('kg', einheit, re.IGNORECASE):
+                            count = str(float(count) / 10)
                         break
                     else:  # article is ordered by piece
                         break

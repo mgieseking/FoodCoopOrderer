@@ -31,6 +31,7 @@ ALL_ITEMS = [
 BUNDLE_CATEGORY = '0 Gebinde'
 COLUMN_NAMES = ';{bestellnummer};{name};;;;{einheit};{preis};{mehrwertsteuer};{pfand};{gebindegroesse};;;{kategorie}'
 GRAMM = '100g'
+KG = 'kg'
 
 
 def write_file(filename, item_list):
@@ -103,7 +104,7 @@ def crawl(fresh_item_list, return_into_list, url_category_list):
 
             if category != TROCKENWARE:
                 # convert kg prices in 100g prices
-                if re.search('kg', einheit, re.IGNORECASE) and kategorie != BUNDLE_CATEGORY:
+                if re.search(KG, einheit, re.IGNORECASE) and kategorie != BUNDLE_CATEGORY:
                     einheit = GRAMM
                     preis = float(preis) / 10
 
